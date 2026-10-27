@@ -208,68 +208,47 @@
     }
   }
 
-  /* =======================================================
-     LOGIN
-     This is a local UI selector, not secure authentication.
-     ======================================================= */
 
-  function login(event) {
-    event.preventDefault();
+function login(event) {
+  event.preventDefault();
 
-    const username = ($("username")?.value || "").trim().toUpperCase();
-    const password = $("password")?.value || "";
+  const username = document
+    .getElementById("login-user")
+    .value.trim()
+    .toUpperCase();
 
-    if (!["CO", "COS"].includes(username) || !password.trim()) {
-      setMessage("login-error", "Introduce CO o COS y una contraseña no vacía.", "error");
-      return;
-    }
+  const password = document
+    .getElementById("login-password")
+    .value;
 
-    session = {
-      authority: username,
-      createdAt: nowISO()
-    };
+  const error = document.getElementById("login-error");
 
-    try {
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
-    } catch (_) {
-      // The session may still work for this page.
-    }
+  const credentials = {
+    COS: "201322",
+    CO: "CO-19315"
+  };
 
-    setMessage("login-error", "");
-    auditEvent("SESSION_OPENED", `${username} opened the local interface.`);
-    showApp();
+  if (
+    !Object.prototype.hasOwnProperty.call(credentials, username) ||
+    credentials[username] !== password
+  ) {
+    error.textContent = "ACCESS DENIED // INVALID CREDENTIALS";
+    return;
+  }
+
+  sessionStorage.setItem(
+    "D64_BLACKLIST_SESSION_V1",
+    JSON.stringify({ username: username })
+  );
+
+  document.getElementById("login-screen").classList.add("hidden");
+  document.getElementById("main-interface").classList.remove("hidden");
+
+  if (typeof renderAll === "function") {
     renderAll();
-    navigate("dashboard");
   }
+}
 
-  function restoreSession() {
-    try {
-      const saved = sessionStorage.getItem(SESSION_KEY);
-      if (!saved) return false;
-
-      const parsed = JSON.parse(saved);
-      if (!["CO", "COS"].includes(parsed.authority)) return false;
-
-      session = parsed;
-      return true;
-    } catch (_) {
-      return false;
-    }
-  }
-
-  function logout() {
-    if (session) {
-      auditEvent("SESSION_CLOSED", `${session.authority} closed the local interface.`);
-    }
-
-    session = null;
-
-    try {
-      sessionStorage.removeItem(SESSION_KEY);
-    } catch (_) {}
-
-    showLogin();
-  }
 
   /* =======================================================
      NAVIGATION
