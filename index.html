@@ -1,0 +1,896 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090b0e">
+  <title>DIVI-64 // BLACKLIST MAINFRAME</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ACCESS TERMINAL -->
+  <section id="login-screen" class="login-screen">
+    <div class="login-frame">
+      <div class="system-mark">D64</div>
+      <p class="eyebrow">DIVI-64 // RESTRICTED SYSTEM</p>
+      <h1>BLACKLIST<br>MAINFRAME</h1>
+      <p class="muted">Personnel Registry & Case Management</p>
+
+      <div class="system-status">
+        <span class="status-dot"></span>
+        MAINFRAME ONLINE
+      </div>
+
+      <form id="login-form">
+        <label for="username">AUTHORITY IDENTIFIER</label>
+        <input id="username" name="username" type="text"
+          placeholder="CO / COS" autocomplete="username" required>
+
+        <label for="password">ACCESS CREDENTIAL</label>
+        <input id="password" name="password" type="password"
+          placeholder="Enter credentials" autocomplete="current-password" required>
+
+        <button type="submit" class="primary-button">OPEN INTERFACE</button>
+        <p id="login-error" class="form-message" role="status"></p>
+      </form>
+
+      <div class="login-footer">
+        INTERNAL OPERATIONS DIVISION
+        <span>BUILD 1.2</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN APPLICATION -->
+  <div id="app" class="app-shell" hidden>
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">D64</div>
+        <div>
+          <p class="eyebrow">DIVI-64</p>
+          <h1>BLACKLIST MAINFRAME</h1>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <div class="system-status">
+          <span class="status-dot"></span>
+          MAINFRAME ACTIVE
+        </div>
+        <div class="session-block">
+          <span id="session-authority">AUTHORITY</span>
+          <strong id="session-clearance">CL-0</strong>
+        </div>
+        <button id="logout-button" class="subtle-button" type="button">
+          TERMINATE SESSION
+        </button>
+      </div>
+    </header>
+
+    <div class="workspace">
+
+      <!-- NAVIGATION -->
+      <aside class="sidebar">
+        <p class="nav-heading">MAIN DIRECTORY</p>
+
+        <nav id="main-navigation">
+          <button class="nav-button active" data-page="dashboard" type="button">
+            <span>01</span> Command Overview
+          </button>
+          <button class="nav-button" data-page="registry" type="button">
+            <span>02</span> Active Registry
+          </button>
+          <button class="nav-button" data-page="requests" type="button">
+            <span>03</span> Request Queue
+            <span id="nav-request-count" class="nav-count">0</span>
+          </button>
+          <button class="nav-button" data-page="reviews" type="button">
+            <span>04</span> Review Chamber
+            <span id="nav-review-count" class="nav-count">0</span>
+          </button>
+          <button class="nav-button" data-page="cipher" type="button">
+            <span>05</span> Decoder
+          </button>
+          <button class="nav-button" data-page="appeals" type="button">
+            <span>06</span> Appeals
+            <span id="nav-appeal-count" class="nav-count">0</span>
+          </button>
+          <button class="nav-button" data-page="archives" type="button">
+            <span>07</span> Archives
+          </button>
+          <button class="nav-button" data-page="audit" type="button">
+            <span>08</span> Audit Trail
+          </button>
+          <button class="nav-button" data-page="admin" type="button">
+            <span>09</span> Administration
+          </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <p class="eyebrow">AUTHORITY PROTOCOL</p>
+          <div class="authority-item">
+            <span class="authority-indicator co-indicator"></span>
+            <div><strong>CO</strong><small>Review & Proposal</small></div>
+          </div>
+          <div class="authority-item">
+            <span class="authority-indicator cos-indicator"></span>
+            <div><strong>COS</strong><small>Final Authority</small></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- CONTENT -->
+      <main class="main-content">
+
+        <!-- DASHBOARD -->
+        <section class="page-section active" id="page-dashboard">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">CENTRAL OPERATIONS / 01</p>
+              <h2>Command Overview</h2>
+              <p class="muted">System activity, pending decisions and case status.</p>
+            </div>
+            <div class="page-date">
+              <span>SYSTEM TIME</span>
+              <strong id="systemClock">--:--:--</strong>
+            </div>
+          </div>
+
+          <div class="metric-grid">
+            <article class="metric-card">
+              <span class="metric-label">TOTAL RECORDS</span>
+              <strong id="metric-total">0</strong>
+              <small>All registered cases</small>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">ACTIVE BLACKLISTS</span>
+              <strong id="metric-active">0</strong>
+              <small>Issued and active</small>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">PENDING REQUESTS</span>
+              <strong id="metric-pending">0</strong>
+              <small>Awaiting authorization</small>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">OPEN APPEALS</span>
+              <strong id="metric-appeals">0</strong>
+              <small>Awaiting resolution</small>
+            </article>
+          </div>
+
+          <div class="content-grid">
+            <article class="panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">CASE MANAGEMENT</p>
+                  <h3>Priority Queue</h3>
+                </div>
+                <span class="panel-index">01-A</span>
+              </div>
+              <div id="dashboard-proposals" class="record-list">
+                <div class="empty-state">NO PENDING RECORDS</div>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">SYSTEM LOG</p>
+                  <h3>Recent Activity</h3>
+                </div>
+                <span class="panel-index">01-B</span>
+              </div>
+              <div id="dashboard-activity" class="activity-list">
+                <div class="empty-state">NO RECENT ACTIVITY</div>
+              </div>
+            </article>
+          </div>
+
+          <article class="panel console-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">OPERATIONAL FEED</p>
+                <h3>Command Output</h3>
+              </div>
+              <span class="status-label">LIVE SESSION</span>
+            </div>
+            <pre id="console-preview" class="console-output">DIVI-64 MAINFRAME
+Awaiting session activity...</pre>
+          </article>
+        </section>
+
+        <!-- ACTIVE REGISTRY -->
+        <section class="page-section" id="page-registry">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">DIRECTORY / 02</p>
+              <h2>Active Registry</h2>
+              <p class="muted">Finalized blacklist records currently in force.</p>
+            </div>
+            <button id="new-record-button" class="primary-button" type="button">
+              + NEW REQUEST
+            </button>
+          </div>
+
+          <div class="toolbar">
+            <input id="registry-search" type="search"
+              placeholder="Search ID, subject or reason...">
+            <select id="registry-status">
+              <option value="all">ALL STATUSES</option>
+              <option value="active">ACTIVE</option>
+              <option value="closed">CLOSED</option>
+            </select>
+            <div class="view-toggle">
+              <button class="active" data-view="table" type="button">TABLE</button>
+              <button data-view="cards" type="button">CARDS</button>
+            </div>
+          </div>
+
+          <div id="record-form-panel" class="panel form-panel" hidden>
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">NEW CASE / SUBMISSION</p>
+                <h3>Create Blacklist Request</h3>
+              </div>
+              <button id="cancel-record-button" class="subtle-button" type="button">
+                CANCEL
+              </button>
+            </div>
+
+            <p class="notice">
+              Submission creates a request only. No blacklist is issued at this stage.
+            </p>
+
+            <form id="record-form">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="record-category">CASE CATEGORY</label>
+                  <select id="record-category" required>
+                    <option value="">SELECT CATEGORY</option>
+                    <option value="conduct">MISCONDUCT</option>
+                    <option value="security">SECURITY VIOLATION</option>
+                    <option value="abuse">ABUSE OF AUTHORITY</option>
+                    <option value="sabotage">SABOTAGE</option>
+                    <option value="fraud">FRAUD / DECEPTION</option>
+                    <option value="other">OTHER</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="record-subject">SUBJECT / IDENTIFIER</label>
+                  <input id="record-subject" required
+                    placeholder="Personnel ID or subject">
+                </div>
+
+                <div class="field">
+                  <label for="record-severity">BLACKLIST SEVERITY</label>
+                  <select id="record-severity" required>
+                    <option value="">SELECT SEVERITY</option>
+                    <option value="1">LEVEL 1 — LOW</option>
+                    <option value="2">LEVEL 2 — MODERATE</option>
+                    <option value="3">LEVEL 3 — HIGH</option>
+                    <option value="4">LEVEL 4 — SEVERE</option>
+                    <option value="5">LEVEL 5 — CRITICAL</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="record-reason">GROUNDS FOR REQUEST</label>
+                  <input id="record-reason" required
+                    placeholder="Concise reason">
+                </div>
+
+                <div class="field full-width">
+                  <label for="record-evidence">EVIDENCE / REFERENCES</label>
+                  <textarea id="record-evidence" rows="4"
+                    placeholder="Evidence, links, witness IDs or document references"></textarea>
+                </div>
+
+                <div class="field full-width">
+                  <label for="record-justification">FORMAL JUSTIFICATION</label>
+                  <textarea id="record-justification" rows="4" required
+                    placeholder="Explain the alleged violation and justify the proposed severity"></textarea>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button class="primary-button" type="submit">
+                  SUBMIT REQUEST
+                </button>
+                <p id="record-form-message" class="form-message" role="status"></p>
+              </div>
+            </form>
+          </div>
+
+          <div id="registry-table-container" class="panel table-panel">
+            <table>
+              <thead>
+                <tr>
+                  <th>CASE ID</th>
+                  <th>SUBJECT</th>
+                  <th>SEVERITY</th>
+                  <th>STATUS</th>
+                  <th>UPDATED</th>
+                  <th>RECORD</th>
+                </tr>
+              </thead>
+              <tbody id="registry-table-body"></tbody>
+            </table>
+          </div>
+
+          <div id="registry-card-container" class="record-card-grid" hidden></div>
+          <div id="record-detail" class="panel detail-panel" hidden></div>
+        </section>
+
+        <!-- REQUEST QUEUE -->
+        <section class="page-section" id="page-requests">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">INTAKE / 03</p>
+              <h2>Request Queue</h2>
+              <p class="muted">Submitted requests awaiting authorization to enter formal review.</p>
+            </div>
+          </div>
+
+          <div class="notice">
+            CO may inspect and prepare proposals. COS controls review authorization.
+          </div>
+
+          <div class="toolbar">
+            <input id="requests-search" type="search"
+              placeholder="Search request ID or subject...">
+            <select id="requests-filter">
+              <option value="all">ALL REQUEST STATES</option>
+              <option value="pending">PENDING AUTHORIZATION</option>
+              <option value="authorized">AUTHORIZED</option>
+              <option value="rejected">REJECTED</option>
+            </select>
+          </div>
+
+          <div class="panel table-panel">
+            <table>
+              <thead>
+                <tr>
+                  <th>REQUEST ID</th>
+                  <th>SUBJECT</th>
+                  <th>SEVERITY</th>
+                  <th>SUBMITTED BY</th>
+                  <th>STATE</th>
+                  <th>OPEN</th>
+                </tr>
+              </thead>
+              <tbody id="requests-table-body"></tbody>
+            </table>
+          </div>
+
+          <div id="request-detail" class="panel detail-panel" hidden></div>
+        </section>
+
+        <!-- REVIEW CHAMBER -->
+        <section class="page-section" id="page-reviews">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">CASE EXAMINATION / 04</p>
+              <h2>Review Chamber</h2>
+              <p class="muted">Authorized cases under examination and awaiting a final verdict.</p>
+            </div>
+          </div>
+
+          <div class="metric-grid">
+            <article class="metric-card">
+              <span class="metric-label">UNDER REVIEW</span>
+              <strong id="review-count">0</strong>
+              <small>Open examinations</small>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">PROPOSALS READY</span>
+              <strong id="review-proposal-count">0</strong>
+              <small>Awaiting COS decision</small>
+            </article>
+          </div>
+
+          <div class="panel table-panel">
+            <table>
+              <thead>
+                <tr>
+                  <th>CASE ID</th>
+                  <th>SUBJECT</th>
+                  <th>SEVERITY</th>
+                  <th>REVIEWER</th>
+                  <th>REVIEW STATE</th>
+                  <th>OPEN</th>
+                </tr>
+              </thead>
+              <tbody id="reviews-table-body"></tbody>
+            </table>
+          </div>
+
+          <div id="review-detail" class="panel detail-panel" hidden></div>
+        </section>
+
+        <!-- DECODER -->
+        <section class="page-section" id="page-cipher">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">PROPOSAL SYSTEM / 05</p>
+              <h2>Decoder</h2>
+              <p class="muted">Prepare structured recommendations for executive consideration.</p>
+            </div>
+            <span class="status-label">CO REVIEW TOOL</span>
+          </div>
+
+          <div class="notice">
+            Decoder output is a proposal, not an authorization or final verdict.
+          </div>
+
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">MODE 01</p>
+                <h3>Text Encoder / Decoder</h3>
+              </div>
+            </div>
+
+            <div class="toolbar">
+              <select id="cipher-format">
+                <option value="decimal">DECIMAL</option>
+                <option value="hex">HEXADECIMAL</option>
+                <option value="base64">BASE64</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="cipher-input">INPUT DATA</label>
+              <textarea id="cipher-input" rows="5"
+                placeholder="Enter text to encode or decode..."></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button id="encode-button" class="primary-button" type="button">ENCODE</button>
+              <button id="decode-button" class="secondary-button" type="button">DECODE</button>
+              <button id="cipher-clear-button" class="subtle-button" type="button">CLEAR</button>
+            </div>
+
+            <div class="field">
+              <label for="cipher-output">OUTPUT</label>
+              <textarea id="cipher-output" rows="5" readonly
+                placeholder="Output will appear here..."></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button id="cipher-copy-button" class="secondary-button" type="button">COPY OUTPUT</button>
+              <p id="cipher-message" class="form-message" role="status"></p>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">MODE 02</p>
+                <h3>Executive Proposal Builder</h3>
+              </div>
+              <span class="panel-index">CO → COS</span>
+            </div>
+
+            <p class="muted">
+              Select a case, record the CO's recommendation and generate a formal proposal.
+            </p>
+
+            <form id="proposal-form">
+              <div class="form-grid">
+                <div class="field full-width">
+                  <label for="proposal-record-id">CASE / REQUEST ID</label>
+                  <input id="proposal-record-id" required
+                    placeholder="Enter existing case ID">
+                </div>
+
+                <div class="field">
+                  <label for="proposal-type">PROPOSAL TYPE</label>
+                  <select id="proposal-type" required>
+                    <option value="">SELECT PROPOSAL</option>
+                    <option value="authorize-review">AUTHORIZE FORMAL REVIEW</option>
+                    <option value="reject-request">REJECT REQUEST</option>
+                    <option value="issue-blacklist">ISSUE BLACKLIST</option>
+                    <option value="reject-blacklist">REJECT BLACKLIST</option>
+                    <option value="authorize-appeal-review">AUTHORIZE APPEAL REVIEW</option>
+                    <option value="uphold-appeal">UPHOLD APPEAL</option>
+                    <option value="deny-appeal">DENY APPEAL</option>
+                  </select>
+                </div>
+
+                <div class="field full-width">
+                  <label for="proposal-analysis">CO ANALYSIS</label>
+                  <textarea id="proposal-analysis" rows="5" required
+                    placeholder="Summarize evidence, findings and relevant context..."></textarea>
+                </div>
+
+                <div class="field full-width">
+                  <label for="proposal-recommendation">RECOMMENDATION & JUSTIFICATION</label>
+                  <textarea id="proposal-recommendation" rows="5" required
+                    placeholder="State the recommended action and explain why..."></textarea>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button class="primary-button" type="submit">
+                  GENERATE CO PROPOSAL
+                </button>
+              </div>
+            </form>
+
+            <div class="field output-field">
+              <label for="proposal-output">FORMAL PROPOSAL OUTPUT</label>
+              <textarea id="proposal-output" rows="12" readonly
+                placeholder="Generated proposals will appear here..."></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button id="proposal-copy-button" class="secondary-button" type="button">
+                COPY PROPOSAL
+              </button>
+              <button id="proposal-export-button" class="secondary-button" type="button">
+                EXPORT PROPOSAL
+              </button>
+              <p id="proposal-message" class="form-message" role="status"></p>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">TRANSFER PROTOCOL</p>
+                <h3>Case Transfer</h3>
+              </div>
+            </div>
+
+            <p class="muted">
+              Prepare a portable representation of a case for transfer or review.
+            </p>
+
+            <form id="transfer-form">
+              <div class="form-grid">
+                <div class="field full-width">
+                  <label for="transfer-record-id">CASE ID</label>
+                  <input id="transfer-record-id" required placeholder="Case ID">
+                </div>
+                <div class="field">
+                  <label for="transfer-category">CATEGORY</label>
+                  <input id="transfer-category" placeholder="Category">
+                </div>
+                <div class="field">
+                  <label for="transfer-subject">SUBJECT</label>
+                  <input id="transfer-subject" placeholder="Subject">
+                </div>
+                <div class="field full-width">
+                  <label for="transfer-reason">GROUNDS</label>
+                  <textarea id="transfer-reason" rows="2"></textarea>
+                </div>
+                <div class="field full-width">
+                  <label for="transfer-evidence">EVIDENCE</label>
+                  <textarea id="transfer-evidence" rows="3"></textarea>
+                </div>
+                <div class="field full-width">
+                  <label for="transfer-justification">JUSTIFICATION</label>
+                  <textarea id="transfer-justification" rows="3"></textarea>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button class="primary-button" type="submit">GENERATE TRANSFER</button>
+                <button id="transfer-copy-button" class="secondary-button" type="button">COPY</button>
+              </div>
+            </form>
+
+            <div class="field">
+              <label for="transfer-output">TRANSFER DATA</label>
+              <textarea id="transfer-output" rows="6" readonly></textarea>
+            </div>
+
+            <div class="field">
+              <label for="transfer-import-input">IMPORT TRANSFER DATA</label>
+              <textarea id="transfer-import-input" rows="4"
+                placeholder="Paste transfer data here..."></textarea>
+            </div>
+            <div class="form-actions">
+              <button id="import-transfer-button" class="secondary-button" type="button">
+                IMPORT DATA
+              </button>
+              <p id="transfer-message" class="form-message" role="status"></p>
+            </div>
+          </article>
+        </section>
+
+        <!-- APPEALS -->
+        <section class="page-section" id="page-appeals">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">CONTESTED DECISIONS / 06</p>
+              <h2>Appeals Division</h2>
+              <p class="muted">Appeal submissions, review authorization and final decisions.</p>
+            </div>
+            <button id="new-review-button" class="primary-button" type="button">
+              + SUBMIT APPEAL
+            </button>
+          </div>
+
+          <div class="metric-grid">
+            <article class="metric-card">
+              <span class="metric-label">PENDING AUTHORIZATION</span>
+              <strong id="appeal-pending-count">0</strong>
+              <small>Awaiting COS authorization</small>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">UNDER APPEAL REVIEW</span>
+              <strong id="appeal-review-count">0</strong>
+              <small>Formal appeal examinations</small>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">CLOSED APPEALS</span>
+              <strong id="appeal-closed-count">0</strong>
+              <small>Finalized appeal outcomes</small>
+            </article>
+          </div>
+
+          <div id="review-form-panel" class="panel form-panel" hidden>
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">NEW APPEAL / SUBMISSION</p>
+                <h3>Submit Appeal Request</h3>
+              </div>
+              <button id="cancel-review-button" class="subtle-button" type="button">
+                CANCEL
+              </button>
+            </div>
+
+            <p class="notice">
+              An appeal must reference an existing case. Submission does not automatically reopen or overturn it.
+            </p>
+
+            <form id="review-form">
+              <div class="form-grid">
+                <div class="field full-width">
+                  <label for="review-record-id">ORIGINAL CASE ID</label>
+                  <input id="review-record-id" required
+                    placeholder="Enter the original blacklist case ID">
+                </div>
+                <div class="field">
+                  <label for="review-type">APPEAL GROUNDS</label>
+                  <select id="review-type" required>
+                    <option value="">SELECT GROUNDS</option>
+                    <option value="new-evidence">NEW EVIDENCE</option>
+                    <option value="procedural-error">PROCEDURAL ERROR</option>
+                    <option value="incorrect-finding">INCORRECT FINDING</option>
+                    <option value="severity-dispute">SEVERITY DISPUTE</option>
+                    <option value="other">OTHER GROUNDS</option>
+                  </select>
+                </div>
+                <div class="field full-width">
+                  <label for="review-reason">APPEAL STATEMENT</label>
+                  <textarea id="review-reason" rows="4" required
+                    placeholder="Explain why the original decision should be reconsidered..."></textarea>
+                </div>
+                <div class="field full-width">
+                  <label for="review-evidence">SUPPORTING EVIDENCE</label>
+                  <textarea id="review-evidence" rows="4"
+                    placeholder="Enter evidence or document references..."></textarea>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button class="primary-button" type="submit">SUBMIT APPEAL</button>
+                <p id="review-form-message" class="form-message" role="status"></p>
+              </div>
+            </form>
+          </div>
+
+          <div class="toolbar">
+            <input id="appeals-search" type="search"
+              placeholder="Search appeal ID or original case...">
+            <select id="appeals-filter">
+              <option value="all">ALL APPEAL STATES</option>
+              <option value="pending">PENDING AUTHORIZATION</option>
+              <option value="under-review">UNDER REVIEW FOR APPEAL</option>
+              <option value="closed">CLOSED</option>
+            </select>
+          </div>
+
+          <div class="panel table-panel">
+            <table>
+              <thead>
+                <tr>
+                  <th>APPEAL ID</th>
+                  <th>ORIGINAL CASE</th>
+                  <th>GROUNDS</th>
+                  <th>STATE</th>
+                  <th>SUBMITTED</th>
+                  <th>OPEN</th>
+                </tr>
+              </thead>
+              <tbody id="appeals-table-body"></tbody>
+            </table>
+          </div>
+
+          <div id="appeals-list" class="record-list"></div>
+          <div id="appeal-detail" class="panel detail-panel" hidden></div>
+        </section>
+
+        <!-- ARCHIVES -->
+        <section class="page-section" id="page-archives">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">HISTORICAL DIRECTORY / 07</p>
+              <h2>Archives</h2>
+              <p class="muted">Closed cases, rejected requests and previous appeal decisions.</p>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <input id="archives-search" type="search"
+              placeholder="Search archived records...">
+            <select id="archives-category">
+              <option value="all">ALL ARCHIVE CATEGORIES</option>
+              <option value="closed">CLOSED CASES</option>
+              <option value="rejected">REJECTED REQUESTS</option>
+              <option value="appeals">CLOSED APPEALS</option>
+            </select>
+          </div>
+
+          <div class="panel table-panel">
+            <table>
+              <thead>
+                <tr>
+                  <th>RECORD ID</th>
+                  <th>SUBJECT</th>
+                  <th>RECORD TYPE</th>
+                  <th>FINAL OUTCOME</th>
+                  <th>DATE CLOSED</th>
+                  <th>OPEN</th>
+                </tr>
+              </thead>
+              <tbody id="archives-table-body"></tbody>
+            </table>
+          </div>
+
+          <div id="archives-list" class="record-list"></div>
+        </section>
+
+        <!-- AUDIT -->
+        <section class="page-section" id="page-audit">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">TRACEABILITY / 08</p>
+              <h2>Audit Trail</h2>
+              <p class="muted">Chronological history of proposals, authorizations and verdicts.</p>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <input id="audit-search" type="search"
+              placeholder="Search event, authority or case ID...">
+            <button id="console-clear-button" class="subtle-button" type="button">
+              CLEAR CONSOLE VIEW
+            </button>
+          </div>
+
+          <div id="audit-list" class="activity-list"></div>
+
+          <article class="panel console-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">SESSION CONSOLE</p>
+                <h3>Full Console</h3>
+              </div>
+            </div>
+            <pre id="full-console" class="console-output">Awaiting session activity...</pre>
+          </article>
+        </section>
+
+        <!-- ADMINISTRATION -->
+        <section class="page-section" id="page-admin">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">SYSTEM GOVERNANCE / 09</p>
+              <h2>Administration</h2>
+              <p class="muted">Catalogues, system reports and executive controls.</p>
+            </div>
+          </div>
+
+          <div class="content-grid">
+            <article class="panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">REFERENCE DATA</p>
+                  <h3>System Catalogue</h3>
+                </div>
+              </div>
+              <p class="muted">View available status definitions and authority procedures.</p>
+              <button id="view-catalog-button" class="secondary-button" type="button">
+                VIEW CATALOGUE
+              </button>
+            </article>
+
+            <article class="panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">SYSTEM REPORT</p>
+                  <h3>Generate Report</h3>
+                </div>
+              </div>
+              <p class="muted">Prepare a report of records and recorded decisions.</p>
+              <button id="generate-update-button" class="secondary-button" type="button">
+                GENERATE REPORT
+              </button>
+            </article>
+          </div>
+
+          <div id="admin-output" class="panel console-output" aria-live="polite">
+            Select an administrative operation.
+          </div>
+
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">EXECUTIVE CONTROL</p>
+                <h3>Override Protocol</h3>
+              </div>
+              <span class="status-label">RESTRICTED</span>
+            </div>
+
+            <p class="muted">
+              Record an authorized administrative intervention with a mandatory reason.
+            </p>
+
+            <button id="override-open-button" class="secondary-button" type="button">
+              OPEN OVERRIDE PANEL
+            </button>
+
+            <div id="override-panel" hidden>
+              <form id="override-form">
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="override-record">CASE ID</label>
+                    <input id="override-record" required placeholder="Case ID">
+                  </div>
+                  <div class="field">
+                    <label for="override-action">ACTION</label>
+                    <select id="override-action" required>
+                      <option value="">SELECT ACTION</option>
+                      <option value="reopen">REOPEN CASE</option>
+                      <option value="close">CLOSE CASE</option>
+                      <option value="return-review">RETURN TO REVIEW</option>
+                    </select>
+                  </div>
+                  <div class="field full-width">
+                    <label for="override-reason">AUTHORIZATION JUSTIFICATION</label>
+                    <textarea id="override-reason" rows="4" required></textarea>
+                  </div>
+                  <div class="field full-width">
+                    <label for="override-confirmation">CONFIRMATION PHRASE</label>
+                    <input id="override-confirmation" required
+                      placeholder="Enter required confirmation phrase">
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button class="primary-button" type="submit">SUBMIT OVERRIDE</button>
+                  <p id="override-message" class="form-message" role="status"></p>
+                </div>
+              </form>
+            </div>
+          </article>
+        </section>
+
+      </main>
+    </div>
+
+    <footer class="app-footer">
+      <span>DIVI-64 / BLACKLIST MAINFRAME</span>
+      <span>INTERNAL OPERATIONS</span>
+      <span>V1.2</span>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
